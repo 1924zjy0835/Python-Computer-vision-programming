@@ -10,6 +10,17 @@ import cv2 as cv
 import matplotlib.pyplot as plt
 
 
+def normal(image, kernel):
+    res = np.multiply(image, kernel).sum()
+
+    if res > 255:
+        return 255
+    elif res < 0:
+        return 0
+    else:
+        return res
+
+
 def _convolve(image, kernel):
     h_kernel, w_kernel = kernel.shape
     h_image, w_image = image.shape
@@ -23,17 +34,6 @@ def _convolve(image, kernel):
             res[i, j] = normal(image[i:i + h_kernel, j:j + w_kernel], kernel)
 
     return res
-
-
-def normal(image, kernel):
-    res = np.multiply(image, kernel).sum()
-
-    if res > 255:
-        return 255
-    elif res < 0:
-        return 0
-    else:
-        return res
 
 
 def conv(image, kernel, mode='same'):
@@ -50,7 +50,7 @@ def conv(image, kernel, mode='same'):
 
 
 if __name__ == '__main__':
-    path = './images/girl01.jpg'
+    path = './images/photo03.jpg'
     image = cv.imread(path)
 
     # kernel 是一个3*3的边缘特征提取器，可以提取各个方向上的边缘
