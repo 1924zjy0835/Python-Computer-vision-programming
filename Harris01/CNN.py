@@ -9,6 +9,15 @@ import numpy as np
 import cv2 as cv
 import matplotlib.pyplot as plt
 
+import urllib.request as urllib
+
+
+def imread_image(url):
+    resp = urllib.urlopen(url)
+    image = np.asarray(bytearray(resp.read()), dtype="uint8")
+    image = cv.imdecode(image, cv.IMREAD_COLOR)
+    return image
+
 
 def normal(image, kernel):
     res = np.multiply(image, kernel).sum()
@@ -50,18 +59,30 @@ def conv(image, kernel, mode='same'):
 
 
 if __name__ == '__main__':
-    path = './images/photo03.jpg'
-    image = cv.imread(path)
+    # 读取要处理的图像
+    # path = './images/photo01.jpg'
+    url = "http://q87jey5py.bkt.clouddn.com/photo01.jpg"
+    # image = cv.imread(path)
+    image = imread_image(url)
 
+    # 自定义卷积核
     # kernel 是一个3*3的边缘特征提取器，可以提取各个方向上的边缘
     # kernel2 是一个5*5的浮雕特征提取器
 
+    # kernel 之和为0、或小于0的时候，为黑色
+    # kernel 之和大于0的时候为彩色
     kernel = np.array([
         [1, 1, 1],
-        [1, -7.5, 1],
+        [1, -8, 1],
         [1, 1, 1]
     ])
 
     res = conv(image, kernel, 'fill')
-    plt.imshow(res)
-    plt.show()
+    cv.imshow("cnn", res)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
+
+    # plt.imshow(res)
+    # # 关闭图像的坐标轴
+    # plt.axis('off')
+    # plt.show()
