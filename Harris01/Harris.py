@@ -18,7 +18,7 @@ gray = np.float32(gray)
 dst = cv.cornerHarris(gray, 2, 3, 0.04)
 dst = cv.dilate(dst, None)
 
-image[dst > 0.01*dst.max()] = [0, 0, 255]
+image[dst > 0.01*dst.max()] = [255, 0, 0]
 # cv.imshow('dst', image)
 
 plt.imshow(image)
